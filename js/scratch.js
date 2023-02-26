@@ -9,6 +9,7 @@ const amountOfHeadphoneImages = document.getElementById("amountOfHeadphoneImages
 const amountOfPhoneImages = document.getElementById("amountOfPhoneImages");
 const amountOfBottleImages = document.getElementById("amountOfBottleImages");
 const train = document.getElementById("train");
+const saveButton = document.getElementById("saveButton");
 const loss = document.getElementById("loss");
 const result = document.getElementById("result");
 const confidence = document.getElementById("confidence");
@@ -30,6 +31,10 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 // A function to be called when the model has been loaded
 function modelLoaded() {
   loading.innerText = "Model loaded!";
+  classifier.load('./model/model.json', function() {
+    loading.innerText = "Model and custom model loaded!";
+    classifier.classify(gotResults);
+  })
 }
 
 // Extract the already learned features from MobileNet
@@ -74,6 +79,11 @@ train.onclick = function() {
       loss.innerHTML = `Done Training! Final Loss: ${totalLoss}`;
     }
   });
+};
+
+// When the save button is pressed, save the model
+saveButton.onclick = function() {
+  classifier.save();
 };
 
 // Show the results
